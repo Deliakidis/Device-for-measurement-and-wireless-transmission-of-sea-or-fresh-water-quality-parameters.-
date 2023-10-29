@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, user-scalable=no">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZFQYZ0CTTC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZFQYZ0CTTC');
+</script>
+	<title>Measurement and Monitoring System of Seawater Quality</title>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+  <script src="leaflet-heat.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+	<script src="leaflet-heat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src='https://apps.elfsight.com/p/platform.js' defer></script>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heatmapjs@2.0.2/heatmap.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-heatmap@1.0.0/leaflet-heatmap.js"></script>
+<script>
+
+    
+    var firebaseConfig = {
+        apiKey: "AIzaSyC2qDb5-uHTnQd8327KCg63YhCuReJvdl0",
+        authDomain: "esp32-firebase-57a23.firebaseapp.com",
+        databaseURL: "https://esp32-firebase-57a23-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "esp32-firebase-57a23",
+        storageBucket: "esp32-firebase-57a23.appspot.com",
+        messagingSenderId: "270746019671",
+        appId: "1:270746019671:web:a3396359fbdb0d5f440012"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+</script>
+	
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}.legend span, .legend label {
+  
+  
+      
+  height: 2px;
+  width: 12%;
+  float: left;
+  opacity: 0.6;
+  text-align: center;
+  font-size: 80%
+}
+.legend {position: fixed;width: 30%;height: 10%; text-align: left; line-height: 30px; color: #555; } 
+.legend i { position: fixed;width: 1px; height: 10cm; float: left; margin-right: 10px; opacity: 0.7; }
+.br {
+  
+    width: 98%; 
+    height: 20px;
+    padding: 1px;
+    background: linear-gradient(90deg, rgba(0,0,153,1) 0%, rgba(51,102,255,1) 25%, rgba(51,204,51,1) 50%, rgba(255,255,0,1) 75%, rgba(255,0,0,1) 100%);
+
+
+}
+		.header {
+            padding: 21px;
+            text-align: center;
+            background: #8cd5f1;
+            color: white;}
+			.header1 {
+            padding: 11px;
+            text-align: center;
+            background: rgb(228, 220, 220);
+            color: black;}
+		.header h1 {
+            font-size: 30px;}
+		.navbar {
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 0;}
+			.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Active/current link */
+.navbar a.active {
+  background-color: #666;
+  color: white;
+}
+
+/* Column container */
+.row {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  -ms-flex: 30%; /* IE10 */
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  -ms-flex: 70%; /* IE10 */
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+hr.new4 {
+  border: 1px solid grey;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 1px 4px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 2px 1px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: #43afe9; 
+  float: right;
+  color: black; 
+  border: 3px solid #1e91ce;
+}
+
+.button1:hover {
+  background-color: #108dd0;
+  color: white;
+}
+.label {
+  color: white;
+  padding: 2px  3px;
+  font-family: Arial;
+}
+.success {background-color: #04AA6D;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */ 
+.other {background-color: #a19580; color: black;}
+
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+
+
+
+</style>
+
+	
+</head>
+<body>
+	<div class="header">
+		<h1>Eye in the water</h1>
+		<p></p>
+	  </div>
+	  
+	  <div class="navbar">
+		<a href="./index.html"class="active" >Home</a>
+		<a href="./index1.html">Bouy 1</a>
+		<a href="./index3.html">Bouy 2</a>
+		<a href="#" class="right">Info</a>
+	  </div>
+
+
+<div id='map' style="width: 100%; height: 100%;"></div>
+
+<script>
+		
+
+	var LeafIcon = L.Icon.extend({
+		options: {
+			
+			iconSize:     [70, 110],
+			shadowSize:   [50, 64],
+			iconAnchor:   [22, 94],
+			shadowAnchor: [4, 62],
+			popupAnchor:  [-3, -76]
+		}
+	});
+	var greenIcon = new LeafIcon({iconUrl: 'bouy1.png'});
+	
+	var cities = L.layerGroup();
+	var mGreen = L.marker([40.849136     ,   25.879326], {icon: greenIcon}).bindPopup("<form action='./index1.html'><button class = 'button button1' type='submit'> View </button><h3>Station 1</h3><p></p></div><hr class='new4'><p><b>Latitude: 40.84</b></br> <b>longitude: 25.87</b> </br> <b>depth: </b> </br> <b>measured parameters:  </b><span class='label warning'>PH</span>  <span class='label success'>temperature</span>  <span class='label other'>NTU</span></br></p>").addTo(cities);
+	var mLittleton 
+
+	
+
+	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+	var mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+ 
+	var streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 10,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	});
+  var cfg = {
+    // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+    // if scaleRadius is false it will be the constant radius used in pixels
+    "radius": 85,
+    "gradient": {
+        /*
+            '0': 'Red',
+            '0.28': 'Yellow',
+          '0.5': 'Green',
+            '0.57': 'Blue',
+          //'0.7': 'rgb(0, 250, 250)',
+            '0.78': 'Green',
+          '0.85': 'Yellow',
+            '1': 'Red'
+          	*/
+  '0': 'Navy',
+  '0.25': 'Blue',
+  '0.5': 'Green',
+  '0.75': 'Yellow',
+  '1': 'Red'
+
+  },
+    "maxOpacity": 0,
+    //"minOpacity": .5,
+    "blur": 0.5,
+    // scales the radius based on map zoom
+    "scaleRadius": false  ,
+    // if set to false the heatmap uses the global maximum for colorization
+    // if activated: uses the data maximum within the current map boundaries
+    //   (there will always be a red spot with useLocalExtremas true)
+    "useLocalExtrema": false,
+    // which field name in your data represents the latitude - default "lat"
+    latField: 'lat',
+    // which field name in your data represents the longitude - default "lng"
+    lngField: 'lng',
+    // which field name in your data represents the data value - default "value"
+    valueField: 'count'
+  };
+  
+  
+  var heatmapLayer = new HeatmapOverlay(cfg);
+	var map = L.map('map', {
+		center: [40.85, 25.866667],
+		zoomControl: false,
+		zoom: 10,
+		layers: [osm, cities, heatmapLayer]
+		
+	});
+	L.control.zoom({
+    position: 'topright'
+}).addTo(map);
+ 
+
+	var baseLayers = {
+		'OpenStreetMap': osm,
+		'Streets': streets
+	};
+
+	var overlays = {
+		'Temperature': cities
+	};
+	
+	
+
+
+
+	
+
+
+
+	
+	var layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+	var crownHill = L.marker([39.75, -105.09]).bindPopup('This is Crown Hill Park.');
+	
+	
+
+	
+	var mGreen = L.marker([52.1579     ,    4.49421], {icon: greenIcon}).bindPopup("<form action='./index1.html'><button class = 'button button1' type='submit'> View </button><h3>Station 1</h3><p></p></div><hr class='new4'><p><b>Latitude: 52,1579</b></br> <b>longitude: 4,49421</b> </br> <b>depth: </b> </br> <b>measured parameters:  </b><span class='label warning'>PH</span>  <span class='label success'>temperature</span>  <span class='label other'>NTU</span></br></p>");
+	var parks = L.layerGroup([crownHill, rubyHill,mGreen]);  
+	
+	
+	var mGreen = L.marker([52.1579     ,    4.49421], {icon: greenIcon}).bindPopup("<form action='./index1.html'><button class = 'button button1' type='submit'> View </button><h3>Station 1</h3><p></p></div><hr class='new4'><p><b>Latitude: 52,1579</b></br> <b>longitude: 4,49421</b> </br> <b>depth: </b> </br> <b>measured parameters:  </b><span class='label warning'>PH</span>  <span class='label success'>temperature</span>  <span class='label other'>NTU</span></br></p>");
+	var NTU = L.layerGroup([mGreen]);  
+  var rubyHill = L.marker([39.68, -105.00]).bindPopup('This is Ruby Hill Park.');
+
+
+	
+	var satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+	layerControl.addBaseLayer(satellite, 'Satellite');
+	layerControl.addOverlay(parks, 'PH');
+	layerControl.addOverlay(NTU, 'NTU');
+	var legend = L.control({position: 'topleft'});
+
+
+</script>
+<script>
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [ 0,5,10,15,20,25,30,35,40],
+        labels = [];
+		div.innerHTML +='<h4>Temperature colorbar</h4><div class="br"></div> <p style="text-align: left; width:49%; display: inline-block;">0°C</p><p style="text-align: right; width:50%;  display: inline-block;">40°C</p>'
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    // first loop for colored legend boxes
+  //  for (var i = 0; i < 8; i++) {
+   //     div.innerHTML +=
+    //        '<span style="background:' + getColor(grades[i] +1) + '"></span> ';
+   // }
+
+    // a line break
+    
+
+    // second loop for text
+   /* for (var i = 0; i < grades.length-1; i++) {
+        div.innerHTML += 
+            //'<label>'+ (grades[i] +'&ndash;' + grades[i + 1]) + '</label>';
+    }*/
+    return div;
+};
+
+legend.addTo(map);</script>
+
+<script src="app1.js" defer></script>
+
+</body>
+</html>

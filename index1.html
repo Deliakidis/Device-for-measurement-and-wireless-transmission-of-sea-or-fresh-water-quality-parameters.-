@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+ <html  lang="en">
+<title>Sea Measurements</title>
+
+
+<style>
+body {background-image: url('back1.jpg');
+background-attachment: fixed;
+background-size: 100% 100%;;
+
+}
+
+    .navbar {
+            overflow: hidden;
+            background-color: #333;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 0;}
+      .navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: rgb(233, 233, 233);
+  color: black;
+}
+
+/* Active/current link */
+.navbar a.active {
+  background-color: #666;
+  color: white;
+}
+
+/* Column container */
+.row {  
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  -ms-flex: 30%; /* IE10 */
+  flex: 30%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  -ms-flex: 70%; /* IE10 */
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+
+}.table, td, th {
+  border: 1px solid black;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+#lowerleft
+{
+    
+position:absolute;
+
+margin-top: 8cm;
+margin-right:2cm;
+top: 0;
+right : 0;
+}.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #bfb8b8;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  right:50%;
+  bottom:50%;
+  
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}.button4 {
+  
+  background-color: #0b52f7;
+  border: none;
+  color: white;
+  padding: 16px 60px;
+  text-align: center;
+  font-size: 16px;
+  margin: auto;
+  opacity: 0.9;
+  transition: 0.3s;
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button4:hover {
+  opacity: 6;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+</style>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width,, shrink-to-fit=no'>
+
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet'>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src='https://apps.elfsight.com/p/platform.js' defer></script>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+
+    
+    var firebaseConfig = {
+        apiKey: "AIzaSyC2qDb5-uHTnQd8327KCg63YhCuReJvdl0",
+        authDomain: "esp32-firebase-57a23.firebaseapp.com",
+        databaseURL: "https://esp32-firebase-57a23-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "esp32-firebase-57a23",
+        storageBucket: "esp32-firebase-57a23.appspot.com",
+        messagingSenderId: "270746019671",
+        appId: "1:270746019671:web:a3396359fbdb0d5f440012"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+</script>
+
+<style>
+body {text-align: center; font-family: 'Times New Roman', Arial; margin-left:auto; margin-right:auto;}
+.slider { width: 300px; }</style>
+
+<style>body{margin: 0px;}h1 {margin: 50px auto 30px;} 
+.side-by-side{display: table-cell;vertical-align: middle;position: relative;}
+.text{font-weight: 600;font-size: 19px;width: 200px;}
+.reading{font-weight: 300;font-size: 50px;padding-right: 25px;}
+.temperature .reading{color: #000ea9;}.humidity .reading{color: #000ea9;}
+.pressure .reading{color: #000ea9;}
+.altitude .reading{color: #000ea9;}
+.superscript{font-size: 17px;font-weight: 600;position: absolute;top: 10px;}
+.data{padding: 10px;}
+.container{display: table;margin: 0 auto;}
+.icon{width:65px}
+.header {
+  padding: 1px;
+  text-align: center;
+  background: #8cd5f1;
+  color: white;}
+.header h1 {
+  font-size: 30px;}
+</style>
+
+</head>
+
+<body>
+  
+  
+    <div class="header">
+    <h1>Eye in the water</h1>
+    <p></p>
+    </div>
+    
+    <div class="navbar">
+    <a href="./index.html" >Home</a>
+    <a href="./index1.html"class="active">Bouy 1</a>
+    <a href="#">Bouy 2</a>
+    <a href="#" class="right">Info</a>
+    </div>
+    
+<div id='webpage'>
+   
+<h1>Sea Measurements </h1>
+<div class='container'>
+    <div class='data temperature'>
+        <div class='side-by-side icon'>
+
+        </div><div class='side-by-side text'>Temperature</div>
+        <div class='side-by-side reading'>
+            22,5
+            
+<span class='superscript'>&deg;C</span></div></div>
+<div class='data humidity'><div class='side-by-side icon'></div>
+<div class='side-by-side text'>PH Reading</div><div class='side-by-side reading'>7,56
+    
+   
+    <span class='superscript'>PH</span></div></div>
+<div class='container'><div class='data temperature'>
+<div class='side-by-side icon'></div><div class='side-by-side text'>Turbidity</div>
+<div class='side-by-side reading'>
+    
+    128
+    <span class='superscript'>&deg;NTU</span>
+</div>
+</div>
+    <h3>PH scale</h3>
+<table  BORDER="2" 
+align="right">
+<tr><th>Too low</th><th>Good</th><th>Too much</th></tr><tr> 
+    <td style='background-color:#d82121'>less than 6,5</td> 
+    <td style='background-color:#00FF00'>greater than 6,5 and less than 8,5</td>
+    <td style='background-color:#d82121'>greater than 8,5</td></tr></table><h3>Turbidity scale</h3>
+    <table class='center'><tr><th>Bad</th><th>Good</th><th>Excellent</th></tr><tr><td style='background-color:#d82121'>greater than 1000</td> 
+         <td style='background-color:#0cb528'>less than 500 and greater than 100</td>  <td style='background-color:#1eff00'>less than 100</td></tr>
+        </table>
+    </br></br>
+   
+   <!-- <strong class="hidden-xs"></strong><div id="lowerleft" class='elfsight-app-77893dd0-9b36-4f4e-906e-822b4cddd16e'></div> </strong>-->
+    
+  </br>
+  
+  
+  <button class="button4"id="button">View Real Time Charts</button>
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+  
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h1>Temperature Chart</h1>
+      <div id="chart-temperature" class="container"></div>
+      <h1>PH   Chart</h1>
+      <div id="chart-humidity" class="container"></div>
+      <h1>Turbidity Chart</h1>
+      
+      <div id="chart-pressure" class="container"></div> <p></br></br></br></br></p>
+    
+    </div>
+  
+  </div>
+
+</div>
+
+</br>
+    <p align="right">    Created by Deliakidis Dimitris </br>Student of 4th GEL Alex/polis </p>
+  
+  
+  </body>
+ 
+  <script src="app.js" defer></script>
+</script>
+
+<script>
+ var chartP = new Highcharts.Chart({
+  chart:{ renderTo:'chart-humidity' },
+  title: { text: 'PH' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'PH ' }
+  },
+  credits: { enabled: false },
+  accesibility:{enabled:false}
+});
+
+
+
+var chartT = new Highcharts.Chart({
+  chart:{ renderTo : 'chart-temperature' },
+  title: { text: ' Temperature' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#059e8a' }
+  },
+  xAxis: { type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'Temperature (Celsius)' }
+    //title: { text: 'Temperature (Fahrenheit)' }
+  },
+  credits: { enabled: false },accesibility:{enabled:false}
+});
+
+
+var chartN = new Highcharts.Chart({
+  chart:{ renderTo:'chart-pressure' },
+  title: { text: 'Turbidity' },
+  series: [{
+    showInLegend: false,
+    data: []
+  }],
+  plotOptions: {
+    line: { animation: false,
+      dataLabels: { enabled: true }
+    },
+    series: { color: '#18009c' }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' }
+  },
+  yAxis: {
+    title: { text: 'NTU' }
+  },
+  credits: { enabled: false },
+  accesibility:{enabled:false}
+});
+
+
+
+
+
+ 
+
+
+var dataFloatPath = 'test/float';
+var dataIntPath = 'test/int';
+var dataNTUPath = 'test/ntu';
+// Get a database reference 
+const databaseFloat = database.ref(dataFloatPath);
+const databaseInt = database.ref(dataIntPath);
+const databaseNTU = database.ref(dataNTUPath);
+// Variables to save database current values
+var floatReading;
+var intReading;
+var NTUReading;
+
+// Attach an asynchronous callback to read the data
+databaseFloat.on('value', (snapshot) => {
+  floatReading = snapshot.val();
+  y=floatReading;
+  var x = (new Date()).getTime();
+       
+      
+    
+  chartP.series[0].addPoint({x, y});
+  console.log(floatReading);
+  document.getElementById("reading-float").innerHTML = floatReading;
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);
+});
+
+
+
+databaseNTU.on('value', (snapshot) => {
+  NTUReading = snapshot.val();
+  y=NTUReading;
+  var x = (new Date()).getTime();
+       
+      
+    
+  chartN.series[0].addPoint({x, y});
+  console.log(NTUReading);
+  document.getElementById("reading-ntu").innerHTML = NTUReading;
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);
+});
+
+
+databaseInt.on('value', (snapshot) => {
+  intReading = snapshot.val();
+  y=intReading;
+  var x = (new Date()).getTime();
+       
+      
+    
+  chartT.series[0].addPoint({x, y});
+  console.log(intReading);
+  document.getElementById("reading-int").innerHTML = intReading;
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);
+});
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("button");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
+</html>

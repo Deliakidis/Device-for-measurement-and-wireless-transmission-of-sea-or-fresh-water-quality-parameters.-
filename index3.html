@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  </head>
+  <body>
+    <py-script>
+        import random
+        i=0
+        songs=["dust in the wind","horse with no name","hotel california","live and let die","nothing else matters","the troope"]
+        hsongs=["dust in the wind","horse with no name","hotel california"]
+        while True:
+         answer= str(input("do you want"))
+         if answer=="Yes" or "YES" or "Y" or "y":
+            x=random.randint(0, len(songs)-1)
+        
+        
+            print(songs[x])
+            del songs[x]
+        
+        
+            i=i+1
+            print(x)
+            print(songs)
+           
+    </py-script>
+  </body>
+</html>
